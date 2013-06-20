@@ -34,6 +34,7 @@ header {
     background-color: hsl(0, 0%, 92%);
     box-shadow: 1px 0px 5px black, -1px 0px 5px black;
     min-height: 100%;
+    position: relative;
 }
 #links {
     text-align: center;
@@ -72,4 +73,21 @@ header {
    80% { -webkit-transform: translate(-1px, -1px) }
    90% { -webkit-transform: translate(1px, 1px) }
    100% { -webkit-transform: translate(1px, -1px) }
+}
+.rotator-right, .rotator-left {
+    display: none;
+    position: absolute;
+    font-size: 500%;
+    right: 15px;
+    cursor: pointer;
+    transition: all 1s;
+    opacity: .6;
+}
+.rotator-left {
+    left: 15px;
+    width: 1em;
+}
+.rotator-left:hover, .rotator-right:hover {
+    opacity: 1;
+    margin-top: 15px;
 }

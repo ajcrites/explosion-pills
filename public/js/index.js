@@ -14,3 +14,7 @@ $("#links a").each(function () {
     }, $this), animateDelay);
     animateDelay += 100;
 });
+
+$(".rotator-right, .rotator-left").show().each(function (_, h) {
+    $(this).css('top', $(window).height() / 2 - $(this).height() / 2);
+});
