@@ -82,6 +82,8 @@ header {
     cursor: pointer;
     transition: all 1s;
     opacity: .6;
+    text-decoration: none;
+    color: black;
 }
 .rotator-left {
     left: 15px;
@@ -90,4 +92,9 @@ header {
 .rotator-left:hover, .rotator-right:hover {
     opacity: 1;
     margin-top: 15px;
+}
+.blog {
+    width: 90%;
+    margin: 0 auto;
+    padding-bottom: 25px;
 }
