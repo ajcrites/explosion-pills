@@ -9,12 +9,9 @@ body {
     font-family: "Century Gothic", "Avant Garde Gothic", "Avant Garde", "URW Gothic L";
 }
 .pill {
-    -webkit-transition: all .5s cubic-bezier(0.75,0.1,0.75,1);
-    -moz-transition: all .5s cubic-bezier(0.75,0.1,0.75,1);
     transition: all .5s cubic-bezier(0.75,0.1,0.75,1);
 
     -webkit-transform: skewY(90deg);
-    -moz-transform: skewY(90deg);
     transform: skewY(90deg);
 
     display: inline-block;
@@ -23,10 +20,15 @@ header a {
     color: green;
     text-decoration: none;
 }
+header a:hover {
+    background-color: transparent;
+    color: green;
+}
 header {
     padding: 25px;
     font-size: 250%;
     color: green;
+    overflow: hidden;
 }
 #content {
     width: 80%;
@@ -97,4 +99,21 @@ header {
     width: 90%;
     margin: 0 auto;
     padding-bottom: 25px;
+}
+a {
+    transition: background-color .3s, color .3s;
+    padding: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -4px;
+}
+a:hover {
+    text-decoration: none;
+    background-color: blue;
+    color: white;
+    border-radius: 3px;
+}
+a:active {
+    padding: 3px 1px 1px 3px;
+    box-shadow: inset 1px 1px black;
 }
