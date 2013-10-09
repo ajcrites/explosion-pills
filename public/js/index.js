@@ -18,3 +18,15 @@ $("#links a").each(function () {
 $(".rotator-right, .rotator-left").show().each(function (_, h) {
     $(this).css('top', $(window).height() / 2 - $(this).height() / 2);
 });
+
+$("[class^=rotator]").click(function (e) {
+    var $this = $(this);
+    $.get($this.attr("href")).done(function (page) {
+        var $page = $(page).find("#page");
+        $page.removeAttr("id");
+        $page.insertAfter("#page");
+        $("#content").addClass("preserve");
+        history.pushState({}, $this.attr("title"), $this.attr("href"));
+    });
+    e.preventDefault();
+});
