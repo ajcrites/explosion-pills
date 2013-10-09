@@ -6,7 +6,7 @@ $(".pill").css({
 var animateDelay = 100;
 $("#links a").each(function () {
     var $this = $(this);
-    var origOffset = $this.offset();
+    var origOffset = $this.position();
     $this.css({'position': 'fixed', 'top': '100%', 'left': origOffset.left});
 
     setTimeout($.proxy(function () {
@@ -25,8 +25,21 @@ $("[class^=rotator]").click(function (e) {
         var $page = $(page).find("#page");
         $page.removeAttr("id");
         $page.insertAfter("#page");
-        $("#content").addClass("preserve");
-        history.pushState({}, $this.attr("title"), $this.attr("href"));
+        $page.addClass("tilt-in").css({
+            "top": $("#page").offset().top,
+            "position": "absolute"
+        });
+        $("#page").addClass("tilt-out");
+
+        setTimeout(function () {
+            $page.css({"transform": "none", "-webkit-transform": "none"});
+            $("#page").css({"transform": "rotateY(-90deg)", "-webkit-transform": "rotateY(-90deg)"});
+            setTimeout(function () {
+                $("#page").remove();
+                $page.attr("id", "page").removeClass("tilt-in").css({"position": "static"});
+                history.pushState({}, $this.attr("title"), $this.attr("href"));
+            }, 500);
+        }, 10);
     });
     e.preventDefault();
 });

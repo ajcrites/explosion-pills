@@ -37,10 +37,10 @@ header {
     box-shadow: 1px 0px 5px black, -1px 0px 5px black;
     min-height: 100%;
     position: relative;
-}
-.preserve {
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
+    -webkit-perspective: none;
+    -webkit-perspective-origin: 50% 0;
 }
 #links {
     text-align: center;
@@ -123,4 +123,19 @@ a:hover {
 a:active {
     padding: 3px 1px 1px 3px;
     box-shadow: inset 1px 1px black;
+}
+
+.tilt-in, .tilt-out {
+    -webkit-transform-origin: top right;
+    -webkit-transform: rotateY(90deg);
+    -webkit-transition: -webkit-transform .5s linear;
+    transform-origin: top right;
+    transform: rotateY(90deg);
+    transition: transform .5s linear;
+}
+.tilt-out {
+    -webkit-transform-origin: top left;
+    -webkit-transform: none;
+    transform-origin: top left;
+    transform: none;
 }
