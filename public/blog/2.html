@@ -5,7 +5,7 @@
     </head>
     <body>
         <div id=content>
-            <header>
+            <header class=head>
                 <a href=/>
                     <span class=pill>E</span>
                     <span class=pill>x</span>
@@ -24,46 +24,147 @@
                 </a>
             </header>
             <article class=blog>
-                <h1>Going Parallel with <code>node.js</code></h1>
+                <h1>Just install <code>zsh</code></h1>
                 <p>
-                    <code>node.js</code> needs no introduction at this point.  The single thread
-                    V8-powered JavaScript server's speed is predicated on asynchronous disk reads
-                    (operations such as database access), keeping the CPU from blocking on these
-                    by using callbacks.
+                    This post is coming directly from someone who initially had doubts about
+                    <code><a href="http://www.zsh.org/">zsh</a></code> as a <code>bash</code>
+                    user and eventually made the switch after a little coaxing from
+                    new coworkers.  I have no experience using any other shell besides
+                    <code>bash</code>, so I can't compare <code>zsh</code> to others
+                    such as <code><a href="http://fishshell.com/">fish</code></a>.  Their
+                    website is almost hilarious enough to make me change indiscriminately,
+                    but let's just talk about <code>zsh</code> for now.
                 </p>
-                <script src="https://gist.github.com/ajcrites/6249540.js"></script>
+                <h2>
+                    Installation
+                </h2>
                 <p>
-                    In the first example, the CPU is blocked while the <code>synchronousRead</code>
-                    operation is performed.  The code is not allowed to continue because <code>emit</code>
-                    depends on the retrieved value as part of the flow.
+                    I've installed <code>zsh</code> on Ubuntu, Arch Linux, and OS/X
+                </p>
+                <ul>
+                    <li>
+                        <code>zsh</code> is the default shell on Arch and <em>appears</em>
+                        to be bundled with the boot iso.  You can start using it before
+                        it's even installed.  If you're using Arch, you have no fear of
+                        <code>zsh</code>
+                    </li>
+                    <li>
+                        For Ubuntu, all you need is <code>sudo apt-get install zsh</code>
+                    </li>
+                    <li>
+                        For OS/X, <code><a href="https://github.com/mxcl/homebrew">brew</a> install zsh</code>
+                        will do.
+                    </li>
+                </ul>
+                <p>
+                    Similar steps should work for other distributions, and screw Windows, and the
+                    <a href="http://git-scm.com/download">Windows <code>git-scm</code></a> comes
+                    packaged with a version of cygwin that uses <code>zsh</code>!
                 </p>
                 <p>
-                    In the second, node.js-spirited example, the call to <code>asynchronousRead</code>
-                    executes quickly and the execution of the code finishes.  The CPU is not blocked.
-                    Whenever <code>asynchronousRead</code> completes, the callback supplied to it will
-                    be executed and the value will be emitted.
+                    Once <code>zsh</code> is installed you can set it as your login
+                    shell with the command <code>chsh -s /bin/zsh</code>
+                    (or wherever <code>zsh</code> happens to be installed).
+                    Keep in mind that this is your <em>login</em> shell, so it won't
+                    take effect unless you relog even if you do not have a terminal
+                    instance running.
                 </p>
                 <p>
-                    Performing actions asynchronously in <code>node.js</code> already improves
-                    speed, but it's possible to eke even more speed out of the server by performing
-                    multiple disk operations in parallel instead of serially.  There may be many
-                    possible ways to do this, but a simple one is with <code>node.js</code>'s
-                    <a href="https://github.com/caolan/async"><code>async</code></a> module.
+                    You can also of course use <code>zsh</code> without relogging by
+                    simply running it with ... <code>zsh</code> ... and be dropped
+                    into the shell.  This should still source <code>.zshrc</code> et. al.
+                    In fact if <code>zsh</code> is not installed under <code>/bin</code>
+                    for some reason -- perhaps you don't have root access -- it is
+                    advisable to run <code>zsh</code> from another shell such as
+                    the default login (probably <code>bash</code>).
                 </p>
-                <script src="https://gist.github.com/ajcrites/6249591.js"></script>
+                <h2>Why not <code>zsh</code>?</h2>
                 <p>
-                    In the first example, the first operation must complete before the second one can
-                    begin.  The CPU does not block while the first operation is running so other requests
-                    can be serviced, but the response for an individual request is much slower than
-                    in the second example.
+                    I've seen several blog posts that start with a section of "Why <code>zsh</code>?"
+                    You can go read these if you want, but a summary is:
+                </p>
+                <ul>
+                    <li>
+                        Total compatibility with <code>bash</code>.  You can use <code>zsh</code>
+                        just like <code>bash</code>
+                    </li>
+                    <li>
+                        Better built in tab completion and simpler tab completion API.
+                    </li>
+                </ul>
+                <p>
+                    You can probably do most of what you can do in <code>zsh</code> in
+                    <code>bash</code>, but most of what you want to do is done for you.
+                    As for why <em>not</em> <code>zsh</code>, I only have a couple of
+                    complaints to be honest:
+                </p>
+                <ul>
+                    <li>
+                        History expansion expands on the current command on <kbd>Enter</kbd>.
+                        I'd rather it run immediately.  Fortunately this is just a simple
+                        settings change: <code>set +o HIST_VERIFY</code> (<code>+o</code>
+                        disables the option).
+                    </li>
+                    <li>
+                        Tab completion is case sensitive.  I'd prefer if it were smartcase.
+                        For example, when I type <kbd>Res&lt;Tab</kbd> I only want words
+                        starting with "R" to be part of the completion words (or at least
+                        cycle them first), but instead <code>zsh</code> will cycle through
+                        "r" words if they come first alphabetically.
+                    </li>
+                </ul>
+                <p>
+                    These are pretty minor complaints.  Another complaint I had initially
+                    with <code>zsh</code> was that I couldn't randomize the <code>@</code>
+                    color on my <code>PS1</code>.
+                </p>
+                <script src="https://gist.github.com/ajcrites/6517720.js"></script>
+                <p>
+                    Most of this works in <code>zsh</code>, except for the command substitution
+                    (<code>$()</code> part).  At least I couldn't get it to work the way I
+                    wanted.  This, along with the slightly overwhelming tab completion made me
+                    shy away from <code>zsh</code> without giving it much of a try.
+                </p>
+                <h3>Tab Completion Lesson #0</h3>
+                <p>
+                    <code>zsh</code>'s tab completion is not that complicated.  If there is more
+                    than one possible word and you <kbd>Tab</kbd>, all available words will be
+                    listed based on the current completion algorithm (generally links in the
+                    current directory are listed).  <kbd>Tab</kbd> again and the first word will
+                    be highlighted.  <kbd>Tab</kbd> to cycle through the words, <kbd>Shift+Tab</kbd>
+                    to go back, and use the arrow keys to navigate horizontally (and vertically
+                    too).  Unfortunately you need to use the arrow keys to navigate as opposed
+                    to the traditional <kbd>hjkl</kbd> as this will simply start to type the next word,
+                    selecting the previous word if one is highlighted.
                 </p>
                 <p>
-                    <code>async</code> will allow for two disk reads to occur simultaneously, allowing
-                    for a faster response time.  The <code>callback</code> that is passed in to the
-                    <code>parallel</code> functions is itself a function that your own defined functions
-                    will call.  Then, the final callback (the second argument to <code>parallel</code>)
-                    will execute when all the functions have completed with its results in order
-                    of the function calls.
+                    If a word is highlighted from the list, <kbd>Enter</kbd> will select it.  <kbd>Space</kbd>
+                    or any other character also works, but typing <kbd>Space</kbd> will end the previous
+                    word and any other character ends the word with a space.  The difference is if you
+                    select a directory and hit <kbd>Enter</kbd>, the word is not ended but is changed to
+                    <code>directory-name/</code>, and <kbd>Tab</kbd> will list files in that directory now.
+                </p>
+                <p>
+                    Don't forget that <kbd>Ctrl+c</kbd> works pretty well if you get stuck.
+                </p>
+                <h3>Randomize color in prompt</h3>
+                <p>
+                    While this is very specific, the existence of <code>add-zsh-hook</code> and its options
+                    including <code>precmd</code>.  I can't find any manual on this command as part
+                    of the installation, but it is described on <a href="http://zsh.sourceforge.net/Doc/Release/Functions.html#Hook-Functions">
+                    the <code>zsh</code> web documentation</a>.  This is on Sourceforge, so I don't know how
+                    current it is, but it's there.
+                </p>
+                <p>
+                    I was able to randomize the <code>@</code> (with a little <a href="http://stackoverflow.com/questions/11528381/zsh-random-color-in-ps1"
+                    >Stackoverflow</a> help).
+                </p>
+                <script src="https://gist.github.com/ajcrites/6517907.js"></script>
+                <p>
+                    This of course belongs in the <code>.zshrc</code>, or selected
+                    <a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a> theme.
+                    By the way, I suggest oh-my-zsh as it comes with tab completion for
+                    a lot of common executables.
                 </p>
             </article>
         </div>
@@ -72,4 +173,5 @@
         <script type=text/javascript src=/js/index.js></script>
     </body>
 </html>
+
 

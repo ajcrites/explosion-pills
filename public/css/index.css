@@ -16,15 +16,15 @@ body {
 
     display: inline-block;
 }
-header a {
+.head a {
     color: green;
     text-decoration: none;
 }
-header a:hover {
+.head a:hover {
     background-color: transparent;
     color: green;
 }
-header {
+.head {
     padding: 25px;
     font-size: 250%;
     color: green;
