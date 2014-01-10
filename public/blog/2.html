@@ -23,155 +23,157 @@
                     <span class=pill>s</span>
                 </a>
             </header>
-            <article class=blog>
-                <h1>Just install <code>zsh</code></h1>
-                <p>
-                    This post is coming directly from someone who initially had doubts about
-                    <code><a href="http://www.zsh.org/">zsh</a></code> as a <code>bash</code>
-                    user and eventually made the switch after a little coaxing from
-                    new coworkers.  I have no experience using any other shell besides
-                    <code>bash</code>, so I can't compare <code>zsh</code> to others
-                    such as <code><a href="http://fishshell.com/">fish</code></a>.  Their
-                    website is almost hilarious enough to make me change indiscriminately,
-                    but let's just talk about <code>zsh</code> for now.
-                </p>
-                <h2>
-                    Installation
-                </h2>
-                <p>
-                    I've installed <code>zsh</code> on Ubuntu, Arch Linux, and OS/X
-                </p>
-                <ul>
-                    <li>
-                        <code>zsh</code> is the default shell on Arch and <em>appears</em>
-                        to be bundled with the boot iso.  You can start using it before
-                        it's even installed.  If you're using Arch, you have no fear of
-                        <code>zsh</code>
-                    </li>
-                    <li>
-                        For Ubuntu, all you need is <code>sudo apt-get install zsh</code>
-                    </li>
-                    <li>
-                        For OS/X, <code><a href="https://github.com/mxcl/homebrew">brew</a> install zsh</code>
-                        will do.
-                    </li>
-                </ul>
-                <p>
-                    Similar steps should work for other distributions, and screw Windows, and the
-                    <a href="http://git-scm.com/download">Windows <code>git-scm</code></a> comes
-                    packaged with a version of cygwin that uses <code>zsh</code>!
-                </p>
-                <p>
-                    Once <code>zsh</code> is installed you can set it as your login
-                    shell with the command <code>chsh -s /bin/zsh</code>
-                    (or wherever <code>zsh</code> happens to be installed).
-                    Keep in mind that this is your <em>login</em> shell, so it won't
-                    take effect unless you relog even if you do not have a terminal
-                    instance running.
-                </p>
-                <p>
-                    You can also of course use <code>zsh</code> without relogging by
-                    simply running it with ... <code>zsh</code> ... and be dropped
-                    into the shell.  This should still source <code>.zshrc</code> et. al.
-                    In fact if <code>zsh</code> is not installed under <code>/bin</code>
-                    for some reason -- perhaps you don't have root access -- it is
-                    advisable to run <code>zsh</code> from another shell such as
-                    the default login (probably <code>bash</code>).
-                </p>
-                <h2>Why not <code>zsh</code>?</h2>
-                <p>
-                    I've seen several blog posts that start with a section of "Why <code>zsh</code>?"
-                    You can go read these if you want, but a summary is:
-                </p>
-                <ul>
-                    <li>
-                        Total compatibility with <code>bash</code>.  You can use <code>zsh</code>
-                        just like <code>bash</code>
-                    </li>
-                    <li>
-                        Better built in tab completion and simpler tab completion API.
-                    </li>
-                </ul>
-                <p>
-                    You can probably do most of what you can do in <code>zsh</code> in
-                    <code>bash</code>, but most of what you want to do is done for you.
-                    As for why <em>not</em> <code>zsh</code>, I only have a couple of
-                    complaints to be honest:
-                </p>
-                <ul>
-                    <li>
-                        History expansion expands on the current command on <kbd>Enter</kbd>.
-                        I'd rather it run immediately.  Fortunately this is just a simple
-                        settings change: <code>set +o HIST_VERIFY</code> (<code>+o</code>
-                        disables the option).
-                    </li>
-                    <li>
-                        Tab completion is case sensitive.  I'd prefer if it were smartcase.
-                        For example, when I type <kbd>Res&lt;Tab</kbd> I only want words
-                        starting with "R" to be part of the completion words (or at least
-                        cycle them first), but instead <code>zsh</code> will cycle through
-                        "r" words if they come first alphabetically.
-                    </li>
-                </ul>
-                <p>
-                    These are pretty minor complaints.  Another complaint I had initially
-                    with <code>zsh</code> was that I couldn't randomize the <code>@</code>
-                    color on my <code>PS1</code>.
-                </p>
-                <script src="https://gist.github.com/ajcrites/6517720.js"></script>
-                <p>
-                    Most of this works in <code>zsh</code>, except for the command substitution
-                    (<code>$()</code> part).  At least I couldn't get it to work the way I
-                    wanted.  This, along with the slightly overwhelming tab completion made me
-                    shy away from <code>zsh</code> without giving it much of a try.
-                </p>
-                <h3>Tab Completion Lesson #0</h3>
-                <p>
-                    <code>zsh</code>'s tab completion is not that complicated.  If there is more
-                    than one possible word and you <kbd>Tab</kbd>, all available words will be
-                    listed based on the current completion algorithm (generally links in the
-                    current directory are listed).  <kbd>Tab</kbd> again and the first word will
-                    be highlighted.  <kbd>Tab</kbd> to cycle through the words, <kbd>Shift+Tab</kbd>
-                    to go back, and use the arrow keys to navigate horizontally (and vertically
-                    too).  Unfortunately you need to use the arrow keys to navigate as opposed
-                    to the traditional <kbd>hjkl</kbd> as this will simply start to type the next word,
-                    selecting the previous word if one is highlighted.
-                </p>
-                <p>
-                    If a word is highlighted from the list, <kbd>Enter</kbd> will select it.  <kbd>Space</kbd>
-                    or any other character also works, but typing <kbd>Space</kbd> will end the previous
-                    word and any other character ends the word with a space.  The difference is if you
-                    select a directory and hit <kbd>Enter</kbd>, the word is not ended but is changed to
-                    <code>directory-name/</code>, and <kbd>Tab</kbd> will list files in that directory now.
-                </p>
-                <p>
-                    Don't forget that <kbd>Ctrl+c</kbd> works pretty well if you get stuck.
-                </p>
-                <h3>Randomize color in prompt</h3>
-                <p>
-                    While this is very specific, the existence of <code>add-zsh-hook</code> and its options
-                    including <code>precmd</code>.  I can't find any manual on this command as part
-                    of the installation, but it is described on <a href="http://zsh.sourceforge.net/Doc/Release/Functions.html#Hook-Functions">
-                    the <code>zsh</code> web documentation</a>.  This is on Sourceforge, so I don't know how
-                    current it is, but it's there.
-                </p>
-                <p>
-                    I was able to randomize the <code>@</code> (with a little <a href="http://stackoverflow.com/questions/11528381/zsh-random-color-in-ps1"
-                    >Stackoverflow</a> help).
-                </p>
-                <script src="https://gist.github.com/ajcrites/6517907.js"></script>
-                <p>
-                    This of course belongs in the <code>.zshrc</code>, or selected
-                    <a href="https://github.com/robbyrussell/oh-my-zsh">oh-my-zsh</a> theme.
-                    By the way, I suggest oh-my-zsh as it comes with tab completion for
-                    a lot of common executables.
-                </p>
-            </article>
+            <div id=page>
+                <article class=blog>
+                    <h1>Running a .NET Web App on a Virtual Machine on Linux Installed on a Macbook to Debug With an Android Emulator</h1>
+                    <p>
+                        It's really difficult for me not to make an inception joke about this whole process, but I've never actually
+                        seen that movie.  Many thanks to Andrew K. for his help setting this deal up.  Without him, I never would have
+                        been able to debug this project.
+                    </p>
+                    <h2>Acquiring a Macbook and installing Linux</h2>
+                    <p>
+                        This is a pretty obvious first step.  Let's assume that you already have a Macbook.  Actually that part is not
+                        particularly important.  Any computer will do.  <a href="http://www.alexvictorchan.com/2013/05/01/installing-ubuntu-13-04-on-13-macbook-pro-retina-102/"
+                        >This tutorial on installing Ubuntu on a Macbook</a> was really helpful.  I don't have a 13" retina, so presumably
+                        this tutorial will work with others in the Macbook family as well.  I've also had a great experience with <code><a href="http://www.rodsbooks.com/refind/">rEFInd</a></code>,
+                        which the article links to (or should I say "to which the article links").
+                    </p>
+                    <p>
+                        Ubuntu is certainly not a requirement here.  Any Linux distribution with a GUI should be able to run VirtualBox
+                        and be able to support port forwarding.  I also tried installing Arch Linux to boot from <code>rEFInd</code>, but
+                        I ran into a lot of trouble and somehow corrupted my Ubuntu partition in the process.  I'll try again at some
+                        point, but the Macbook is my work computer and has to be available to me for development at any time.
+                    </p>
+                    <h2>Virtual Machine Software</h2>
+                    <p>
+                        A lot of people seem to love VMWare, but I personally prefer <a href="https://www.virtualbox.org/wiki/Linux_Downloads">VirtualBox</a>.
+                        You can use <code>dpkg</code> to install the <code>.deb</code> yourself if you desire, but VirtualBox is also available as
+                        an aptitude package and you can install it from the command line too: <code>sudo apt-get install virtualbox</code>.  The command
+                        <code>virtualbox</code> will start up the GUI, but the helpful <code>vboxmanage</code> command line tool is also available.
+                    </p>
+                    <p>
+                        <strong>This guide will use VirtualBox</strong> as the Virtual Machine software.  If you want to use something else, you are
+                        on your own.  The concepts should be the same, though.
+                    </p>
+                    <h2>Installing Windows</h2>
+                    <p>
+                        You will need a Windows boot CD, USB, or ISO.  I can't give one to you, but hopefully you already have one.  Once you do, start
+                        <code>virtualbox</code> and choose New.  Pick an appropriate name for the VM (I just used "Windows") and select the version
+                        that will be installed.  If you have an ISO it's probably in the name.  It may also be written on the CD.  You can just ask
+                        whoever provided it to you.
+                    </p>
+                    <p>
+                        At this point, unless you know what you're doing more than I do, just stick with the defaults.  Choose to create a new virtual
+                        disk, and choose VDI as the hard drive type.  You can choose either "Dynamically allocated" or "Fixed size" though.  Supposedly
+                        the latter is faster, but you will be able to grow and shrink the partition size of the former as needed.  Choose the appropriate
+                        folder and ROM size.  I wouldn't go less than 25G for the partition size.
+                    </p>
+                    <p>
+                        Now the VM will appear in VirtualBox's list of VMs.  Installing from an ISO is the simplest, so hopefully you have one available.
+                        Boot the new VM (double-click it or select "Start" from the toolbar) and you will be asked for the location of the boot disk.
+                        Select the ISO and wait for several hours while Windows is installed.  Once that is complete you can theoretically discard the ISO
+                        as it probably takes up a lot of space, but beware as you won't be able to install the OS afresh again.
+                    </p>
+                    <p>
+                        <strong>NOTE:</strong> that if you do remove the ISO file, VirtualBox will complain when you boot.  It will still boot from the OS
+                        installed on the virtual hard disk.  If you want to stop it from complaining, while the VM is powered off select "Settings -> Storage,
+                        and remove the ISO.  You can also simply choose to ignore the warning as it is harmless in this case.
+                    </p>
+                    <aside>
+                        <h1>Increasing an existing VM's size</h1>
+                        <p>
+                            <strong>NOTE:</strong> that this is not a necessary step.
+                        </p>
+                        <p>
+                            If you already have a virtual machine partition, you may want to increase the ROM size.  You can't do this with a fixed partition,
+                            but you can with a standard partition.  One solution is to clone the fixed partition and then increase that one's size.  If it's
+                            Windows, you have to boot it and then use "Disk Manager," right click "C:" and select "Extend Volume."  Your guess is as good as
+                            mine as to where "Disk Manager" actually is so I just opened up "My Computer" and use "Search" to find it.  Certainly it's in different
+                            spots in different versions (Windows 7, Windows 8).
+                        </p>
+                        <p>
+                            The actual commands you would use would be
+                        </p>
+                        <pre><code>
+        $ cd ~/VirtualBox\ VMs # what's with the space?
+        $ cd $DESIRED_VM_DIR
+        $ vboxmanage clonehd --variant Standard $VBOX_NAME.vdi $NEW_NAME.vdi
+        $ vboxmanage modifyhd $NEW_NAME.vdi --resize 51200 # 50G, it's in MB
+                        </code></pre>
+                        <p>
+                            Note that only the <code>modifyhd</code> command is necessary if the disk is already Standard and not Fixed.
+                            <code>vboxmanage</code> will complain if you try to resize a fixed partition.
+                        </p>
+                        <p>
+                            At this point you can use the VirtualBox GUI to create a new VM from the cloned <code>.vdi</code> file.
+                            There is probably a way to do this via <code>vboxmanage</code> as well, but I didn't try.
+                        </p>
+                    </aside>
+                    <h2>Running the .NET project form Visual Studio</h2>
+                    <p>
+                        I can't help very much with actually <em>setting up</em> the web application project
+                        since the one I worked with was already done.  There were a couple important points, though.
+                    </p>
+                    <ul>
+                        <li>
+                            You must run the project with the C# server as opposed to the IIS server.
+                            The IIS firewall is nuts.  This is a setting in the <code>Properties</code>
+                            pseudo-file.  If you actually are going to use IIS, don't forget to change it back!
+                        </li>
+                        <li>
+                            In case "Start" doesn't work, you can try right-clicking the project and
+                            selecting "View in Browser."  If you can actually view it in the browser,
+                            it's ready for port forwarding.
+                        </li>
+                    </ul>
+                    <h2>Port Forwarding from Windows</h2>
+                    <p>
+                        While Windows may have a way to do this natively, it's much easier to use
+                        <a href="http://download.cnet.com/SPI-Port-Forward/3000-2651_4-10764348.html"
+                        >SPI Port Forward</a>.  Yes, although the site looks like a scam site it's a
+                        legit download.  Plus it will just be on your virtual machine.
+                    </p>
+                    <p>
+                        Run SPI Port Forward and set the "Local Port" and "Remote Port" to whatever port
+                        your web app is running on (in my case 5653).  This is the same as whatever port
+                        your browser in Windows is using to access the app.
+                        <strong>Also set "Remote host" to <code>localhost</code></strong>.  The port
+                        forwarding mysteriously does not work if you don't do this.
+                    </p>
+                    <p>
+                        Next you have to change the VM settings for the host to listen on the appropriate port.
+                        In Virtualbox, Right-click the VM and click "Settings" (or select it and click the Settings
+                        button in the toolbar).  Select "Network," and then "Port Forwarding."  For "Host Port"
+                        select whatever port you want (remember that ports below 1024 are privileged) and for
+                        "Guest Port" select the port Windows is using to run the app.
+                    </p>
+                    <p>
+                        Now you should be able to access the app on your host machine via <code>localhost:&lt;HOST-PORT></code>.
+                        In case this does not work, try deactivating and activating SPI Port Forward again.  The Log
+                        for SPI Port Forward should be reporting connections when they come.
+                    </p>
+                    <p>
+                        <strong>Note:</strong> If you accidentally close SPI Port Forward, I'm actually not sure what
+                        to do.  Restarting the Windows machine will put you back in the shape you need, though.  You also
+                        need to deactivate and activate each time you redeploy the app.
+                    </p>
+                    <h2>Accessing your web app in an Android emulator</h2>
+                    <p>
+                        You can't use <code>localhost</code> on Android as that is the loopback address for the Android
+                        machine and it's not running the app.  Port forwarding may be possible, but it's much simpler
+                        to just use your host machine's IP address.  Run <code>ifconfig</code> on the host machine
+                        and see the <code>inet addr</code> section (probably under <code>eth1</code>).  You should
+                        be able to access your app on Android or other devices on the network via <code>HOST-IP:4000</code>.
+                    </p>
+                </article>
+            </div>
         </div>
         <script type=text/javascript src=//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js></script>
         <script type=text/javascript src=http://code.jquery.com/ui/1.9.2/jquery-ui.min.js></script>
         <script type=text/javascript src=/js/index.js></script>
     </body>
 </html>
+
 
 

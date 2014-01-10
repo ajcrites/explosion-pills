@@ -26,253 +26,323 @@
             <div id=page>
                 <article class=blog>
                     <header>
-                        <h1>JSON Is not JavaScript</h1>
-                        <p>
-                            (and JavaScript is not JSON)
-                        </p>
+                        <h1><code>rebase</code>-based Git Flow for the modern developer</h1>
                     </header>
                     <p>
-                        You don't have to spend much time on Stackoverflow
-                        before you find someone saying something like
+                        <a href="http://nvie.com/posts/a-successful-git-branching-model/"
+                        >Git Flow</a>, or <em>A successful Git branching model</em>
+                        is all the rage these days when it comes to application
+                        development -- and with good reason.  This is an excellent,
+                        if not the preeminent workflow available.  It applies
+                        to any development methodology that I can think of, and
+                        it's especially suited for Agile.
                     </p>
-                    <blockquote>
-                        I have JSON like <code>{key: value}</code>.
-                        How do I access value?
-                    </blockquote>
                     <p>
-                        It won't take long before a pedant points out
-                        that a JavaScript object (either an object literal
-                        or an object derived from some other code) is
-                        <em>not</em> JSON.  I am more than happy to be
-                        one of those pedants as well.
+                        When introducing new developers to the concept of
+                        <code>git-flow</code>, it's often done as a whole.
+                        We explain the important components like the feature
+                        and release branches and try to ingrain knowledge of
+                        basic git commands.  It's very easy to lose sight of
+                        a developers main goal in git-flow which is pumping
+                        out easily manageable feature branches at blinding
+                        speed.
                     </p>
-                    <h2>Misnomer</h2>
                     <p>
-                        While the vast majority of examples of JSON I've seen
-                        use objects, this is not a requirement.  The below
-                        examples are all valid JSON.
+                        The git process itself should hardly be a hurdle.  This
+                        is a tool for collaboration that exists to help us
+                        as developers maintain our work and work on teams.  I
+                        don't think that the git commands that need to be run
+                        to publish a release branch should take more than
+                        a few seconds -- optimistically.
+                    </p>
+                    <h2>Initializing your repo on Github</h2>
+                    <p>
+                        This step is normally done for developers working on
+                        business projects already.  However, there are times
+                        where developers may want to create their own projects
+                        for business or personal reasons.  First, create the
+                        repository on Github itself and <a href="https://help.github.com/articles/generating-ssh-keys"
+                        >set up your ssh keys</a>.
+                        Then...
+                    </p>
+                    <script src="https://gist.github.com/ajcrites/8346126.js?file=git1.sh"></script>
+                    <p>
+                        If your repository is being maintained by you, you
+                        should also set up a <code>develop</code> branch
+                        on Github and ideally make it the default branch
+                        in the repository settings.
+                    </p>
+                    <h2>Branching out</h2>
+                    <p>
+                        Now that you have a repository,
+                        the first concept to grasp when developing feature
+                        branches is that you always want to cut from
+                        <code>develop</code> -- and an up-to-date
+                        <code>develop</code> at that.  This means that
+                        the first step before even creating a feature
+                        branch should be pulling develop.
+                    </p>
+                    <script src="https://gist.github.com/ajcrites/8346126.js?file=git2.sh"></script>
+                    <p>
+                        Ideally you would do this <em>every time</em> before
+                        creating a new feature branch.  <strong>However</strong>,
+                        your <code>develop</code> branch should <em>never</em>
+                        contain changes that origin's develop does not have.
+                        Make sure that you stash or otherwise remove outstanding
+                        changes before you pull.  <code>git status</code>
+                        should never report that your develop is any number
+                        of commits ahead of origin's develop.  It can be
+                        behind, of course -- that's why you pull.
+                    </p>
+                    <p>
+                        Of course if you follow this development model properly,
+                        no changes should ever sneak into your <code>develop</code>
+                        at all.  They should only come from <code>git pull</code>
+                        from origin's develop.
+                    </p>
+                    <p>
+                        Once your develop is ready to go, you can create
+                        your feature branch.  Features will probably be tied
+                        to some user story or bug tracking number in a big
+                        company that uses a tool like Jira.  For your own
+                        projects, you can handle this however you want.  Just
+                        make sure that you follow your organization's own
+                        standards for feature branch naming.
+                    </p>
+                    <script src="https://gist.github.com/ajcrites/8346126.js?file=git3.sh"></script>
+                    <p>
+                        <strong>Warning:</strong> you should do whatever you
+                        can to make sure that you are cutting a branch directly
+                        from develop.  Use <code>git status</code>,
+                        <code>git branch</code> (with no arguments), or others
+                        to confirm that you are on the <strong>develop</strong>
+                        branch.  You should only cut branches from non-develop
+                        branches in advanced cases when you really know what
+                        you're doing.
+                    </p>
+                    <p>
+                        If you're using <a href="http://www.zsh.org/"><code>zsh</code></a>,
+                        you can use <code>git_prompt_info</code> as part of your
+                        prompt and it should display the current branch you are
+                        on at each prompt.  A simple <kbd>Enter</kbd> or
+                        <kbd>Ctrl+c</kbd> will update the prompt to confirm for you.
+                    </p>
+                    <h2>The art of commit messages</h2>
+                    <p>
+                        Get some work done on your branch and go crazy with
+                        commits.  Writing commit messages is important and
+                        also difficult to do properly.  Make sure that you
+                        follow your organization's standards which probably
+                        include prefacing all messages with the tracking
+                        number for the feature you're working on
+                        -- if it's available.
+                    </p>
+                    <p>
+                        In my opinion, a good commit message starts with a very
+                        succinct line summarizing the changes.  This line should
+                        be at most 50 characters.  In fact, if you use
+                        <code>git commit</code> <em>without</em> the
+                        <code>-m</code> option (yes, this is possible), your
+                        editor will open.  Vim's syntax highlighting for
+                        the git commit message will highlight the first 50
+                        characters on the first line, so you can even tell
+                        when you've gone over.
+                    </p>
+                    <p>
+                        If you have more to say than just 50 characters,
+                        enter two newlines and go nuts saying whatever it
+                        is you need/want to say.  I would still keep
+                        the line length limit, but I suggest using
+                        <a href="https://help.github.com/articles/github-flavored-markdown"
+                        >Github flavored Markdown</a> for the bulk of
+                        the message since most of your commit messages
+                        will probably be viewed on Github and this will
+                        be easier for others to read.  Markdown also has
+                        the advantage of being semantic when viewed even
+                        before it's parsed into markup and rendered.
+                    </p>
+                    <script src="https://gist.github.com/ajcrites/8346126.js?file=git4.sh"></script>
+                    <script src="https://gist.github.com/ajcrites/8346126.js?file=git5.sh"></script>
+                    <p>
+                        Going over the 50 character limit is bad enough, but
+                        even worse is the fact that <strong>the newline after
+                        the introductory line was left out</strong>.  This
+                        extra newline is actually important and it affects how
+                        the <code>oneline</code> format of the log message
+                        is displayed.
+                    </p>
+                    <script src="https://gist.github.com/ajcrites/8346126.js?file=git6.sh"></script>
+                    <p>
+                        If the extra newline after the first line is omitted,
+                        git will simply treat the single newline as a space
+                        when displaying logs in the handy <code>oneline</code>
+                        format.
+                    </p>
+                    <p>
+                        Specifying the tracking number in the commit message
+                        can be advantageous for some software.  For example,
+                        it may move the item from "In Progress" to
+                        "Development Completed" when your code is merged
+                        automatically.  It's also helpful for when you
+                        have to look at history.
+                    </p>
+                    <h2>Publishing your changes</h2>
+                    <p>
+                        Now that you have awesome commit messages and feature
+                        code ready to go, you want to deploy these to
+                        Github for others to use.  <em>But wait!</em> Your
+                        organization has decided that it prefers rebasing
+                        changes onto the development branch rather than
+                        merging them <em>into</em> the branch.  Rebasing
+                        can simplify things for maintainers.
+                    </p>
+                    <p>
+                        Without getting into a lot of details about what
+                        rebasing is and how it works right now, it's
+                        important to know this cardinal rule:
+                        <strong>Do not <code>rebase</code> the same
+                        branch twice!</strong>.  More accurately,
+                        you should not rebase a <em>pushed</em> branch.
+                        Even more accurately, you should not rebase
+                        a pushed branch that has been pulled and is
+                        still being actively worked on.
+                    </p>
+                    <p>
+                        Most of the time, you probably won't need to
+                        rebase a feature branch again.  It does depend, though.
+                        If your changes get sent back to you, then
+                        you won't have much of a choice if you have to
+                        make a lot of changes before your feature will
+                        be accepted for a merge.  If a reviewer refuses
+                        to merge a branch that you've already rebased,
+                        make sure you discuss how to handle the situation
+                        unless you already have a strong understanding
+                        of what really goes on with rebasing and how
+                        best to add new changes to this branch to complete
+                        the feature in a way that the merge will
+                        be accepted.
+                    </p>
+                    <p>
+                        At any rate, other than moving the feature around
+                        in your tracking software, you can complete
+                        the feature and create a pull-request with
+                        a handy script.
+                    </p>
+                    <p>
+                        This assumes that...
                     </p>
                     <ul>
-                        <li>2</li>
-                        <li>[]</li>
-                        <li>true</li>
-                        <li>false</li>
-                        <li>null</li>
-                        <li>"this is a string"</li>
-                    </ul>
-                    <p>
-                        It should be obvious to anyone familiar with JSON that
-                        none of these are objects.  However,
-                        <code>JSON.parse('2')</code> will happily extract the
-                        number "2."  Without getting into an argument about
-                        whether or not 2 can be considered an object in
-                        some circumstances, it is not an <em>object literal</em>
-                        in JavaScript.  Even so, none of these constructs are
-                        particularly useful on their own except possibly
-                        arrays.
-                    </p>
-                    <p class=warn>
-                        <strong>Note:</strong> it's probably worth noting that
-                        "nothing" is not valid JSON.  Many JSON parsers will
-                        complain when parsing an empty string, e.g.
-                        <code>JSON.parse("")</code>
-                    </p>
-                    <p>
-                        Still, I think that JSON is a good name.  It's easy
-                        to pronounce, and it was at least <em>inspired</em>
-                        by JavaScript Object literal syntax.  Regardless, referring
-                        to a JavaScript object as JSON is not correct.
-                        It's idiomatic to refer to a string containing valid
-                        JSON as "JSON."  "JSON string" may be more accurate,
-                        but I've tossed the phrase "parse xml" when I was talking
-                        about a string in plenty of cases.
-                    </p>
-                    <p>
-                        This doesn't mean that JSON <em>has</em> to be a string
-                        either.  It's a notation -- an idea.  It's just convenient
-                        to refer to a construct that you can successfully use
-                        <code>JSON.parse</code> on as "JSON."
-                    </p>
-                    <h3>Who's to blame?</h3>
-                    <p>
-                        Usually in the context of JavaScript code when people
-                        refer to JSON what they actually mean is a JavaScript
-                        object (or just "Object" to avoid redundancy).
-                        While it is true that JSON can be parsed into a
-                        JavaScript object in some circumstances, this doesn't
-                        mean that they are analogous.  Part of the confusion
-                        does stem from documentation including the
-                        <a href="http://tools.ietf.org/html/rfc4627">RFC (4627)</a>
-                        that actually names the thing JavaScript <strong>Object</strong>
-                        Notation.
-                    </p>
-                    <p>
-                        Another source of the problem is probably the
-                        monster <a href="http://jquery.com/">jQuery</a>.
-                        When I say "monster" I am referring to its meteoric
-                        rise to fame and its ability to influence the JavaScript
-                        community and new developers.  I happen to love
-                        the library.
-                    </p>
-                    <p>
-                        jQuery will conveniently black box the parsing of
-                        JSON in some circumstances.  For instance, if
-                        valid JSON is received from a request via
-                        <code>$.getJSON</code>, jQuery will parse it behind
-                        the scenes and the response returned to the done
-                        method will already be parsed.  As I've said this is
-                        almost always a JavaScript object, so one could easily
-                        think that this is just what JSON is and how it works.
-                    </p>
-                    <p>
-                        This can actually lead to confusion if one assumes
-                        that jQuery will only return a request raw.
-                        The below will explode horribly (it would if using
-                        <code>JSON.parse</code> for the same reason).  JavaScript
-                        will attempt to convert the already parsed data in
-                        <code>json</code> to a string that is obviously not
-                        valid JSON.
-                    </p>
-                    <script src="https://gist.github.com/ajcrites/6939728.js"></script>
-                    <p>
-                        This could lead to a stackoverflow question from a confused
-                        user.  They will quickly get comments about how everything
-                        should work if they just remove the line containing
-                        <code>$.parseJSON</code>.  However, their variable will
-                        still be named <code>json</code> even though it's
-                        not JSON.  Not by any standard -- nor was it ever.
-                        Still, their code refers to it as <code>json</code>,
-                        other perhaps even less experienced developers will
-                        think of it as JSON, and the cycle continues.
-                    </p>
-                    <h2>When JavaScript is not JSON and vice versa</h2>
-                    <p>
-                        There are plenty of circumstances where JavaScript
-                        is not valid JSON.
-                    </p>
-                    <script src="https://gist.github.com/ajcrites/6939254.js"></script>
-                    <p>
-                        There are also circumstances where JSON is not valid
-                        JavaScript.  In fact, since JavaScript does not support
-                        bare objects, the simple statement <code>{"k":"v"}</code>
-                        will emit an error in JavaScript (go ahead and try it
-                        in your browser console) whereas it can be parsed
-                        as valid JSON.  However, the expression
-                        <code>({"k":"v"})</code> is valid (albeit it useless).
-                        The parentheses turn the code into an expression
-                        that can be evaluated.  This is similar to why you need
-                        <code>=</code> or parens to immediately invoke
-                        a function from its declaration.
-                    </p>
-                    <script src="https://gist.github.com/ajcrites/6939346.js"></script>
-                    <p>
-                        Astute readers will note that parentheses are not
-                        a valid part of JSON syntax.  Thus the statement
-                        <code>{"k":"v"}</code> can be considered valid JSON
-                        but an error in JavaScript.  <code>({"k":"v"})</code>
-                        is <em>not</em> valid JSON because of the parentheses
-                        -- the very construct that turns the statement into
-                        an expression in JavaScript, allowing it to run.
-                    </p>
-                    <p>
-                        At this point many readers may be saying, "so what"
-                        (and knowing developers, plenty are probably saying,
-                        "so true.")  I don't have a great answer for that.
-                        If you can correctly point out when JavaScript is
-                        not JSON you might feel some sense of superiority over
-                        others who may not recognize this fact so readily.
-                    </p>
-                    <p>
-                        In defense of the JavaScript vs. JSON recognition argument,
-                        I think that clarity and consistency are
-                        important -- especially in the software development world.
-                        You shouldn't call something something when it isn't
-                        something.  You should call it what it is.  It's also
-                        important to know what makes valid JSON vs. JavaScript
-                        because it's quite likely that if you have to work
-                        with one you will have to work with the other.
-                    </p>
-                    <h2>JSONP is not JSON</h2>
-                    <p>
-                        Adding to the confusion is the existence of
-                        <a href="http://json-p.org/">JSONP</a>.
-                        Now that the awesome power of
-                        <a href="http://en.wikipedia.org/wiki/Cross-origin_resource_sharing"
-                        >CORS</a> is available, JSONP may slowly die, but as long as
-                        <code>XDomainRequest</code> is required by IE8 and IE9,
-                        we'll be held back.
-                    </p>
-                    <p>
-                        JSONP is called "JSON with padding," so it only serves
-                        to further the confusion.  In fact, JSONP is not
-                        JSON and it doesn't even have anything to do <em>with</em>
-                        JSON.  Incidentally valid JSON will work when JSONP
-                        is used correctly, but this is not even a requirement.
-                    </p>
-                    <p>
-                        JSONP is actually JavaScript.  In fact, the recommended
-                        content type for the response is <code>application/javascript</code>.
-                        Ostensibly there is a proposal that <code>application/json-p</code>
-                        be used for security reasons, but as far as I know this
-                        content type is not actually implemented.
-                    </p>
-                    <p>
-                        A JSONP response needs to be valid JavaScript because
-                        it is actually <em>run as JavaScript</em>.  As discussed
-                        above, a valid JSON response and valid JavaScript
-                        are generally incompatible.
-                    </p>
-                    <script src="https://gist.github.com/ajcrites/6939922.js"></script>
-                    <p>
-                        Even though the object that is the argument of the callback
-                        above <code>could</code> have been written as valid
-                        JSON (i.e. with notation that could be parsed via
-                        <code>JSON.parse</code>) it's not.  It will still run
-                        just fine after a JSONP request.
-                    </p>
-                    <p>
-                        This can lead to a tremendous amount of confusion --
-                        perhaps even more than jQuery's automatic parsing.
-                        Attempting a jsonp request and getting a JSON
-                        response will lead to the potentially confusing error
-                    </p>
-                    <blockquote>
-                        SyntaxError: Unexpected token :
-                    </blockquote>
-                    <p>
-                        To the uninitiated this could seem like all kinds of
-                        problems.
-                    </p>
-                    <ul>
-                        <li>The unexpected token is a non-printing character</li>
                         <li>
-                            There is an issue with the server and it's not
-                            sending back valid JSON (it shouldn't be for a JSONP
-                            request anyway).
+                            you have the handy <a href="http://hub.github.com/"
+                            ><code>hub</code></a> command installed -- a
+                            command-line interface for Github 
                         </li>
                         <li>
-                            There's a syntax error in the client script.
+                            <code>git</code> aliased to <code>hub</code>
                         </li>
                     </ul>
+                    <script src="https://gist.github.com/ajcrites/8346126.js?file=git7.sh"></script>
                     <p>
-                        I could go on, but the point is that confusing names
-                        and a lack of good standardization for JSONP can
-                        make debugging hell.  This may seem like a contrived
-                        circumstance, <em>but it actually happened to my
-                        team yesterday</em>.  Fortunately, I immediately
-                        recognized the problem and was able to clear it up.
+                        In case you can't follow it, this script rebases your
+                        current branch (hopefully a feature branch -- you
+                        may want to double-check) on top of <code>develop</code>,
+                        pushes your changes to Github, makes a pull request
+                        to merge your feature branch with Github's <code>develop</code>
+                        (and prints out a link to it for you) and checks out
+                        <code>develop</code> so you can start on a new feature
+                        branch again.
                     </p>
                     <p>
-                        Even though the confusion many have between JSON
-                        and JavaScript Object (or JavaScript Object literal at
-                        times) may not be that big of a deal, JSON vs.
-                        JSONP is a huge deal.  It would make a lot more sense
-                        if it were called script tag injection, which is what
-                        it is, but the "injection" bogeyman would not make
-                        this term very marketable.  It would also have the
-                        same initialism as "sexually transmitted infection."
-                        Actually, that may make the name more accurate than
-                        anything having to do with JSON.
+                        You can of course do all of these steps manually.
+                        You can create the pull request on Github itself.
+                        The <code>ProjectOwner</code> part obviously needs
+                        to be changed to the owner of the repo.  If you have
+                        forked the repo and are using your forked
+                        copy as <code>origin</code>, you would be the owner
+                        for the <code>-h</code> option.
+                        Make sure you type an awesome pull-request message
+                        in the same vein as a commit message.
+                    </p>
+                    <p>
+                        Once your awesome changes have been accepted and merged,
+                        you should pull from <code>develop</code> again.
+                        At this point, you can use <code>git branch -d
+                        feature-branch</code> to delete the feature branch
+                        since you don't need it anymore.  If you want to delete
+                        it before it's been merged, us <code>-D</code>.  Just
+                        make sure that you've pushed all your changes first!
+                    </p>
+                    <h2>In Conclusion</h2>
+                    <p>
+                        As simple as I've tried to make this, it's still a lot
+                        to take in.  Here are the simplified steps for
+                        publishing a release branch with a git-flow rebase
+                        model once you already have a working copy of
+                        the repo and all you're all set for Github.
+                    </p>
+                    <ol>
+                        <li>
+                            Make sure your <code>develop</code> branch is
+                            up-to-date.
+                        </li>
+                        <li>
+                            Cut a feature branch from <code>develop</code>.
+                        </li>
+                        <li>
+                            Make lots of changes.  Write nice commit messages.
+                        </li>
+                        <li>
+                            Make sure <code>develop</code> is up-to-date...
+                            again.
+                        </li>
+                        <li>
+                            Rebase your feature branch onto develop.
+                        </li>
+                        <li>
+                            Push your rebased feature branch to origin.
+                        </li>
+                        <li>
+                            Create a pull request to merge your feature
+                            branch into develop.
+                        </li>
+                    </ol>
+                    <p>
+                        If you happen to take part in the maintenance of
+                        the repo, there may be some work for you now.
+                        Luckily, it's pretty simple:
+                    </p>
+                    <ol>
+                        <li>
+                            Review the proposed code changes.
+                        </li>
+                        <li>
+                            Reject the changes with appropriate comments
+                            if they're no good
+                        </li>
+                        <li>
+                            Confirm the merge if it's good.  Everyone should
+                            be ready to pull from <code>develop</code>
+                            again before starting a new feature branch.
+                        </li>
+                        <li>
+                            Delete the branch, if you're into that sort of thing.
+                        </li>
+                    </ol>
+                    <p>
+                        If <code>develop</code> is not up-to-date locally,
+                        you may wind up with a lot of unfortunate merge
+                        conflicts.  It makes sense to work with only one
+                        feature branch at a time.  This is not always possible,
+                        though.
+                    </p>
+                    <p>
+                        My article makes a lot of assumptions about names.
+                        There is nothing special about the names
+                        <code>develop</code>, <code>origin</code>,
+                        or even <code>master</code>.  Make sure that you know
+                        the taxonomy/terminology of your repositories
+                        for whatever organization you are working for.
+                        If one does not exist, work to create the standard.
                     </p>
                 </article>
             </div>
@@ -282,6 +352,3 @@
         <script type=text/javascript src=/js/index.js></script>
     </body>
 </html>
-
-
-
